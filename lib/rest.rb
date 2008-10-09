@@ -24,8 +24,7 @@ module REST
 
 			if args = args.update('appid' => @app_id)
 				# TODO: What about keys without value?
-				# TODO: Convert k and v to strings before URI.encode?
-				url.query = args.map { |k,v| "%s=%s" % [URI.encode(k), URI.encode(v)] }.join("&")
+				url.query = args.map { |k,v| "%s=%s" % [URI.encode(k.to_s), URI.encode(v.to_s)] }.join("&")
 			end
 						
 			case method
