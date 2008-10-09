@@ -1,17 +1,18 @@
 module Yahoo
   module GeoPlanet
     class Place < Base
-      attribute :woe_id,    Integer,  :matcher => "woeid"
-      attribute :type,      String,   :matcher => "placeTypeName"
-      attribute :name,      String
-            
+      attr_reader  :woe_id, :type, :name
       attr_reader  :latitude, :longitude, :bounding_box
       alias_method :lat, :latitude 
       alias_method :lon, :longitude
             
       def initialize_without_polymorphism(xml)
         super
-                
+        
+        @woe_id = xml.at("woeid").inner_text
+        @type   = xml.at("placeTypeName").inner_text
+        @name   = xml.at("name").inner_text
+        
         ["admin1", "admin2", "admin3", "locality1", "locality2", "postal"].each do |optional|
           begin
             element = xml.at(optional)          

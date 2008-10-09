@@ -2,28 +2,7 @@ module Yahoo
   module GeoPlanet
     class Base
       class << self
-        attr_accessor   :attributes
         cattr_accessor  :connection
-        
-        def attribute(*args)
-          @attributes ||= {}
-          
-          options = args.extract_options!
-          name, type = args
-          class_eval %(attr_accessor :#{name})
-          @attributes[name] = options.update({:type => type})
-
-          if options[:type] == Boolean
-            define_method("#{name}?".to_sym) do
-              value = instance_variable_get("@#{name}")
-              return value
-            end
-          end
-        end
-        
-        def attributes
-          @attributes || {}
-        end
         
         def name_with_demodulization
           self.name_without_demodulization.demodulize        
@@ -44,23 +23,6 @@ module Yahoo
             
       def initialize(xml)
         raise ArgumentError unless xml.kind_of?(Hpricot)
-                
-        self.class.attributes.each do |attribute, options|
-          value = xml.at(options[:matcher] || attribute.to_s).inner_text
-          begin
-            if options[:type] == Integer
-              value = value.to_i
-            elsif options[:type] == Float
-              value = value.to_f
-            elsif options[:type] == Date
-              value = Date.parse(value) rescue nil
-            elsif options[:type] == Boolean
-              value = !! value.to_i.nonzero?
-            end
-          ensure
-            self.instance_variable_set("@#{attribute}", value)
-          end     
-        end        
       end
       
       def initialize_with_polymorphism(arg)
@@ -84,5 +46,3 @@ module Yahoo
     class YahooWebServiceError < StandardError; end
   end
 end
-
-class Boolean; end
