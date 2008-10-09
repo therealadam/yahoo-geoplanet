@@ -1,17 +1,17 @@
 module Yahoo
   module GeoPlanet
     class Place < Base
-      attribute :woeid,     Integer
-      attribute :type,      String, :matcher => "placeTypeName"
+      attribute :woe_id,    Integer,  :matcher => "woeid"
+      attribute :type,      String,   :matcher => "placeTypeName"
       attribute :name,      String
-      
+            
       attr_reader  :latitude, :longitude, :bounding_box
       alias_method :lat, :latitude 
       alias_method :lon, :longitude
             
       def initialize_without_polymorphism(xml)
         super
-        
+                
         ["admin1", "admin2", "admin3", "locality1", "locality2", "postal"].each do |optional|
           begin
             element = xml.at(optional)          
@@ -26,14 +26,31 @@ module Yahoo
         end
         
         element = xml.at("centroid")
-        @latitude = element.at("latitude").inner_text.to_f
+        @latitude  = element.at("latitude").inner_text.to_f
         @longitude = element.at("longitude").inner_text.to_f
-        
+      
         element = xml.at("boundingBox")
         @bounding_box = ["northEast","southWest"].collect do |corner|
           corner = element.at(corner)
-          [corner.at("latitude"), corner.at("longitude")].collect{|e| pp e; e.inner_text.to_f}
+          [corner.at("latitude"), corner.at("longitude")].collect{|e| e.inner_text.to_f}
         end
+      end
+      
+      # Association Collections
+      ["parent", "ancestors", "belongtos", "neighbors", "siblings", "children"].each do |association|
+        define_method(association.to_sym) do
+          xml = self.class.fetch_and_parse(self.class.api_path(self.class.name, @woe_id, association), :select => :long)
+          value = xml.search(self.class.name.downcase).collect{|elem| self.class.new(elem)}
+          return association.singularize == association ? value.first : value
+        end
+      end
+      
+      def to_s
+        self.name
+      end
+      
+      def to_i
+        self.woe_id.to_i
       end
       
       class << self
