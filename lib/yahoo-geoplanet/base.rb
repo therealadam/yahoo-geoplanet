@@ -25,7 +25,6 @@ module Yahoo
           parameters = [resource, id, collection, *args].compact
           # return parameters.collect!{|param| CGI::escape(param.to_s).downcase}.join('/')
           return parameters.collect!{|param| param.to_s.downcase}.join('/')
-          
         end
       end
             
