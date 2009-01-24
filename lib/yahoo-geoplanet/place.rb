@@ -39,8 +39,8 @@ module Yahoo
       
       # Association Collections
       ["parent", "ancestors", "belongtos", "neighbors", "siblings", "children"].each do |association|
-        define_method(association.to_sym) do
-          xml = self.class.fetch_and_parse(self.class.api_path(self.class.name, @woe_id, association), :select => :long)
+        define_method(association.to_sym) do |*options|
+          xml = self.class.fetch_and_parse(self.class.api_path(self.class.name, @woe_id, association, *options), :select => :long)
           value = xml.search(self.class.name.downcase).collect{|elem| self.class.new(elem)}
           return association.singularize == association ? value.first : value
         end

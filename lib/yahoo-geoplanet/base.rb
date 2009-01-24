@@ -16,8 +16,16 @@ module Yahoo
         end
         
         def api_path(resource, id, collection, *args)
+          args = args.extract_options!
+          count = args.delete(:count)
+          start = args.delete(:start)
+          collection += ";count=#{count}" if count
+          collection += ";start=#{start}" if start
+          
           parameters = [resource, id, collection, *args].compact
-          return parameters.collect!{|param| CGI::escape(param.to_s).downcase}.join('/')
+          # return parameters.collect!{|param| CGI::escape(param.to_s).downcase}.join('/')
+          return parameters.collect!{|param| param.to_s.downcase}.join('/')
+          
         end
       end
             
