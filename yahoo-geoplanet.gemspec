@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name     = "yahoo-geoplanet"
-  s.version  = "0.2.0"
-  s.date     = "2008-11-13"
+  s.version  = "0.2.1"
+  s.date     = "2010-03-25"
   s.summary  = "A Ruby wrapper for the Yahoo! GeoPlanet API."
   s.email    = "mail@matttthompson.com"
   s.homepage = "http://github.com/mattt/yahoo-geoplanet/"
@@ -10,14 +10,14 @@ Gem::Specification.new do |s|
   s.authors  = ["Mattt Thompson"]
   
   s.files    = [
-		"README", 
-		"yahoo-geoplanet.gemspec", 
-		"lib/yahoo-geoplanet.rb",
-		"lib/rest.rb",
-		"lib/yahoo-geoplanet/base.rb",
-		"lib/yahoo-geoplanet/place.rb",
-		"lib/yahoo-geoplanet/version.rb"
-	]
+    "README", 
+    "yahoo-geoplanet.gemspec", 
+    "lib/yahoo-geoplanet.rb",
+    "lib/rest.rb",
+    "lib/yahoo-geoplanet/base.rb",
+    "lib/yahoo-geoplanet/place.rb",
+    "lib/yahoo-geoplanet/version.rb"
+  ]
   
   s.add_dependency("hpricot",       ["> 0.6"])
   s.add_dependency("activesupport", ["> 2.1.0"])
