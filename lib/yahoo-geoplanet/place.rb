@@ -15,7 +15,9 @@ module Yahoo
         
         ["admin1", "admin2", "admin3", "locality1", "locality2", "postal"].each do |optional|
           begin
-            element = xml.at(optional)          
+            element = xml.at(optional)
+            next if element.empty?
+            
             type  = element.attributes["type"].downcase.gsub(/\s+/, '_')
             value = element.inner_text
           
