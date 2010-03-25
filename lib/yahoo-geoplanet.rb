@@ -1,7 +1,15 @@
-%w{rubygems cgi hpricot activesupport}.each { |x| require x }
+require 'cgi'
+require 'hpricot'
 
-$:.unshift(File.dirname(__FILE__)) unless
-  $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
+begin
+  # ActiveSupport < 3
+  require 'activesupport'
+rescue LoadError => e
+  # ActiveSupport > 3
+  require 'active_support/core_ext/class/attribute_accessors'
+  require 'active_support/core_ext/module/aliasing'
+  require 'active_support/inflector'
+end
 
 require 'rest'
 require 'yahoo-geoplanet/base'
